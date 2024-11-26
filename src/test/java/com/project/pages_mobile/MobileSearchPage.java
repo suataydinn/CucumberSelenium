@@ -1,4 +1,4 @@
-package com.project.mobile_pages;
+package com.project.pages_mobile;
 
 public class MobileSearchPage {
 }

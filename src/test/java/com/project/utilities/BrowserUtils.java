@@ -1,6 +1,6 @@
 package com.project.utilities;
 
-import com.project.web_pages.MainPage;
+import com.project.pages_web.MainPage;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;

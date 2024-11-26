@@ -1,4 +1,4 @@
-package com.project.web_pages;
+package com.project.pages_web;
 
 import com.project.utilities.Driver;
 import org.openqa.selenium.WebDriver;
