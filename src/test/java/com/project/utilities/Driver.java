@@ -38,22 +38,26 @@ public class Driver {
                         options.addArguments("--remote-allow-origins=*");
                         options.addArguments("--disable-notifications");
                         //options.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "tr-TR"));
-                       // System.setProperty("webdriver.chrome.driver", "path/to/driver/exe");
+                        // System.setProperty("webdriver.chrome.driver", "path/to/driver/exe");
                         //options.addArguments("--remote-allow-origins=*");
-                       // WebDriverManager.chromedriver().setup();
+                        // WebDriverManager.chromedriver().setup();
                         driverPool.set(new ChromeDriver(options));
                         break;
 
                     case "chrome-headless":
                         ChromeOptions options1 = new ChromeOptions();
-                      //  options1.addArguments("--remote-allow-origins=*");
+
                         options1.addArguments("--headless=new");
                         options1.addArguments("--disable-gpu");
-                        //options1.addArguments("--lang=tr-TR");
                         options1.addArguments("--disable-notifications");
                         options1.addArguments("--remote-allow-origins=*");
 
-           //             WebDriverManager.chromedriver().setup();
+                        options1.addArguments("--window-size=1920x1080");
+
+                        // Amazon için User-Agent'i ayarla (burada örnek bir Chrome user-agent kullanılıyor)
+                        options1.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36");
+
+
                         driverPool.set(new ChromeDriver(options1));
 
                         break;
@@ -109,6 +113,7 @@ public class Driver {
             }
             return driverPool.get();
         } else if (new Hooks().publicScenario.equals("@browserMobile")) {
+
             if (driverPool1.get() == null) {
                 String browser = System.getProperty("browserMobile") != null ? browser = System.getProperty("browserMobile") : ConfigurationReader.get("browserMobile");
                 switch (browser) {
@@ -124,8 +129,8 @@ public class Driver {
                         cp.setCapability(ChromeOptions.CAPABILITY, options);
                         options.merge(cp);
                         driverPool1.set(new ChromeDriver(options));
-                     //   DevTools devTools = driverPool1.get().getDevTools();
-                      //  devTools.createSession();
+                        //   DevTools devTools = driverPool1.get().getDevTools();
+                        //  devTools.createSession();
 
                         Map<String, Object> deviceMetrics = new HashMap<>();
                         deviceMetrics.put("width", 375);
@@ -141,20 +146,20 @@ public class Driver {
                         WebDriverManager.chromedriver().clearDriverCache();
 
                         ChromeOptions options1 = new ChromeOptions();
-                       // options1.addArguments("user-agent='Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36'");
+                        // options1.addArguments("user-agent='Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36'");
                         options1.addArguments("user-agent='Mozilla/5.0 (Linux; Android 13.0; Mi 14.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.143 Mobile Safari/537.36'");
 
                         options1.addArguments("--remote-allow-origins=*");
                         options1.addArguments("--headless=new");
-                  //      options1.addArguments("--enable-gpu");
+                        //      options1.addArguments("--enable-gpu");
                         options1.addArguments("--disable-notifications");
-                 //       options1.addArguments("--remote-allow-origins=*");
+                        //       options1.addArguments("--remote-allow-origins=*");
                         DesiredCapabilities cp1 = new DesiredCapabilities();
                         cp1.setCapability(ChromeOptions.CAPABILITY, options1);
                         options1.merge(cp1);
                         driverPool1.set(new ChromeDriver(options1));
-                     //   DevTools devTools1 = driverPool1.get().getDevTools();
-                      //  devTools1.createSession();
+                        //   DevTools devTools1 = driverPool1.get().getDevTools();
+                        //  devTools1.createSession();
 
                         Map<String, Object> deviceMetrics1 = new HashMap<>();
                         deviceMetrics1.put("width", 385);
@@ -169,16 +174,18 @@ public class Driver {
             return driverPool1.get();
 
         }
+
+
         return null;
 
     }
     public static void closeDriver() {
-        if (Hooks.publicScenario.equals("@browserMobile")){
+        if (Hooks.publicScenario.equals("@browserMobile")) {
             if (driverPool1.get() != null) {
                 driverPool1.get().quit();
                 driverPool1.remove();
             }
-        }else if(Hooks.publicScenario.equals("@browserWeb")){
+        } else if (Hooks.publicScenario.equals("@browserWeb")) {
             if (driverPool != null) {
                 driverPool.get().quit();
                 driverPool.remove();
