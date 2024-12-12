@@ -20,31 +20,44 @@ public class Hooks {
     public void setUp(Scenario scenario) {
 
         String browser="";
+
+        // set publicScenario
         for (String tag : scenario.getSourceTagNames()) {
             if (tag.equals("@browserWeb")) {
                 publicScenario=tag;
                 browser=ConfigurationReader.get("browserWeb");
-                //Driver.get().get(ConfigurationReader.get("url1")); gibi urlde çeçitlendirilebilir
             } else if (tag.equals("@browserMobile")) {
                 publicScenario=tag;
                 browser=ConfigurationReader.get("browserMobile");
+            }else {
+                //Driver.get().get(ConfigurationReader.get("url1")); gibi urlde çeçitlendirilebilir
+                publicScenario = tag;
             }
         }
-        Driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
 
-        switch (browser) {
-            case "chrome-headless" :
-                Driver.get().manage().window().setSize(new Dimension(1440, 900));
-                break;
 
-            default:
-                Driver.get().manage().window().maximize();
+        if(publicScenario.equals("@Api")){
+            // do nothing
+        }else{
+            Driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+
+            switch (browser) {
+                case "chrome-headless" :
+                    Driver.get().manage().window().setSize(new Dimension(1440, 900));
+                    break;
+
+                default:
+                    Driver.get().manage().window().maximize();
+            }
+
+            // go to url
+            Driver.get().get(ConfigurationReader.get("url"));
+            BrowserUtils.waitForPageToLoad(10);
+
+            //accept cookie
+            if(Driver.get().findElements(By.cssSelector("#sp-cc-accept")).size()>0) Driver.get().findElement(By.cssSelector("#sp-cc-accept")).click();
+
         }
-
-        Driver.get().get(ConfigurationReader.get("url"));
-        BrowserUtils.waitForPageToLoad(30);
-
-        BrowserUtils.scrollToSize(0,-500);
 
     }
 
