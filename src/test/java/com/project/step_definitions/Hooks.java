@@ -23,18 +23,24 @@ public class Hooks {
 
         // set publicScenario
         for (String tag : scenario.getSourceTagNames()) {
-            if (tag.equals("@browserWeb")) {
-                publicScenario=tag;
-                browser=ConfigurationReader.get("browserWeb");
-            } else if (tag.equals("@browserMobile")) {
-                publicScenario=tag;
-                browser=ConfigurationReader.get("browserMobile");
-            }else {
-                //Driver.get().get(ConfigurationReader.get("url1")); gibi urlde çeçitlendirilebilir
-                publicScenario = tag;
+            publicScenario = tag;
+
+            switch (tag) {
+                case "@browserWeb":
+                    browser = ConfigurationReader.get("browserWeb");
+                    break;
+
+                case "@browserMobile":
+                    browser = ConfigurationReader.get("browserMobile");
+                    break;
+
+                default:
+                    // Farklı bir URL veya işlem burada ele alınabilir
+                    // Örneğin: Driver.get().get(ConfigurationReader.get("url1"));
+                    browser = null;
+                    break;
             }
         }
-
 
         if(publicScenario.equals("@Api")){
             // do nothing
