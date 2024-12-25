@@ -1,5 +1,5 @@
-# ParallelCucumber
-
+# Parallel_Cucumber
+_Selenium
 Hello this repo is for test automation of hepsiburada web page
 
 Descriptions of Test Automation Framework:
