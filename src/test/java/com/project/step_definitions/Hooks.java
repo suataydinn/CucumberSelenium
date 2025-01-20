@@ -6,6 +6,7 @@ import com.project.utilities.Driver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.restassured.RestAssured;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -38,6 +39,7 @@ public class Hooks {
                     // Farklı bir URL veya işlem burada ele alınabilir
                     // Örneğin: Driver.get().get(ConfigurationReader.get("url1"));
                     browser = null;
+                    RestAssured.baseURI = ConfigurationReader.get("baseURI");
                     break;
             }
         }
@@ -45,7 +47,6 @@ public class Hooks {
         if(publicScenario.equals("@Api")){
             // do nothing
         }else{
-            Driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
 
             switch (browser) {
                 case "chrome-headless" :
@@ -75,17 +76,6 @@ public class Hooks {
             scenario.attach(screenshot,"image/png","screenshot");
         }
         Driver.closeDriver();
-    }
-
-    @Before("@abc")
-    public void setUpdb(){
-        System.out.println("\tconnecting to database...");
-    }
-
-    @After("@abc")
-    public void closeDb(){
-        System.out.println("\tdisconnecting to database...");
-
     }
 
 
