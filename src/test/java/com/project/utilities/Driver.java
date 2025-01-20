@@ -28,19 +28,18 @@ public class Driver {
     private static InheritableThreadLocal<ChromeDriver> driverPool1 = new InheritableThreadLocal<>();
 
     public static WebDriver get() {
-
-        if (new Hooks().publicScenario.equals("@browserWeb")) {
+        if (Hooks.publicScenario.equals("@browserWeb")) {
             if (driverPool.get() == null) {
                 String browser = System.getProperty("browserWeb") != null ? browser = System.getProperty("browserWeb") : ConfigurationReader.get("browserWeb");
                 switch (browser) {
                     case "chrome":
                         ChromeOptions options = new ChromeOptions();
+                        options.addArguments("--disable-web-security");
+
                         options.addArguments("--remote-allow-origins=*");
                         options.addArguments("--disable-notifications");
-                        //options.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "tr-TR"));
-                        // System.setProperty("webdriver.chrome.driver", "path/to/driver/exe");
-                        //options.addArguments("--remote-allow-origins=*");
-                        // WebDriverManager.chromedriver().setup();
+                        options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.6778.140 Safari/537.36");
+
                         driverPool.set(new ChromeDriver(options));
                         break;
 
@@ -52,9 +51,6 @@ public class Driver {
                         options1.addArguments("--disable-notifications");
                         options1.addArguments("--remote-allow-origins=*");
 
-                        options1.addArguments("--window-size=1920x1080");
-
-                        // Amazon için User-Agent'i ayarla (burada örnek bir Chrome user-agent kullanılıyor)
                         options1.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36");
 
 
@@ -112,7 +108,7 @@ public class Driver {
                 }
             }
             return driverPool.get();
-        } else if (new Hooks().publicScenario.equals("@browserMobile")) {
+        } else if (Hooks.publicScenario.equals("@browserMobile")) {
 
             if (driverPool1.get() == null) {
                 String browser = System.getProperty("browserMobile") != null ? browser = System.getProperty("browserMobile") : ConfigurationReader.get("browserMobile");
@@ -120,7 +116,6 @@ public class Driver {
                     case "mobile":
                         WebDriverManager.chromedriver().setup();
                         ChromeOptions options = new ChromeOptions();
-                        //options.addArguments("user-agent='Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36'");
                         options.addArguments("user-agent='Mozilla/5.0 (Linux; Android 13; Mi 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36'");
 
                         options.addArguments("--remote-allow-origins=*");
@@ -129,8 +124,6 @@ public class Driver {
                         cp.setCapability(ChromeOptions.CAPABILITY, options);
                         options.merge(cp);
                         driverPool1.set(new ChromeDriver(options));
-                        //   DevTools devTools = driverPool1.get().getDevTools();
-                        //  devTools.createSession();
 
                         Map<String, Object> deviceMetrics = new HashMap<>();
                         deviceMetrics.put("width", 375);
@@ -144,22 +137,16 @@ public class Driver {
                     case "mobile-headless":
                         WebDriverManager.chromedriver().setup();
                         WebDriverManager.chromedriver().clearDriverCache();
-
                         ChromeOptions options1 = new ChromeOptions();
-                        // options1.addArguments("user-agent='Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Mobile Safari/537.36'");
                         options1.addArguments("user-agent='Mozilla/5.0 (Linux; Android 13.0; Mi 14.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.6167.143 Mobile Safari/537.36'");
 
                         options1.addArguments("--remote-allow-origins=*");
                         options1.addArguments("--headless=new");
-                        //      options1.addArguments("--enable-gpu");
                         options1.addArguments("--disable-notifications");
-                        //       options1.addArguments("--remote-allow-origins=*");
                         DesiredCapabilities cp1 = new DesiredCapabilities();
                         cp1.setCapability(ChromeOptions.CAPABILITY, options1);
                         options1.merge(cp1);
                         driverPool1.set(new ChromeDriver(options1));
-                        //   DevTools devTools1 = driverPool1.get().getDevTools();
-                        //  devTools1.createSession();
 
                         Map<String, Object> deviceMetrics1 = new HashMap<>();
                         deviceMetrics1.put("width", 385);
